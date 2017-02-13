@@ -61,6 +61,7 @@ public class FrequencyCounter {
     }
 
     public synchronized void stop() {
-        countDownTimer.cancel();
+        if (countDownTimer != null)
+            countDownTimer.cancel();
     }
 }

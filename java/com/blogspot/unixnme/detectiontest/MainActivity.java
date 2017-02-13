@@ -29,7 +29,6 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback, Ca
 
         // Example of a call to a native method
         tv = (TextView) findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
 
         SurfaceView surfaceView = (SurfaceView) findViewById(R.id.surface_view);
         surfaceView.getHolder().addCallback(this);
@@ -42,6 +41,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback, Ca
     protected void onPause() {
         super.onPause();
         if (camera != null) {
+            camera.stopPreview();
             camera.release();
             camera = null;
         }
@@ -60,11 +60,14 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback, Ca
         if (camera != null) {
             camera.setDisplayOrientation(90);
             camera.setPreviewCallback(this);
+            try {
+                camera.setPreviewDisplay(holder);
+            } catch (Throwable t) {}
         }
         if (camera != null)
             camera.startPreview();
         if (counter != null)
-            counter.start(3);
+            counter.start(1);
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
